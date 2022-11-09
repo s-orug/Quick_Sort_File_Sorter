@@ -32,6 +32,29 @@ void sort(int array[], int low, int high, int size) {
   }
 }
 
+void outputFile(std::string filename, int array[], int size) {
+
+  std::ofstream output_file(filename);
+  for (int s = 0; s < size - 1; ++s) {
+    output_file << array[s] << " ";
+  }
+  output_file << array[size - 1];
+  output_file.close();
+}
+
+void executionTime(float time, int size) {
+
+  std::string execution_time_file = "executionTime.txt";
+  std::ofstream exec(execution_time_file, std::ios_base::app);
+  std::ifstream file(execution_time_file);
+  if (!(file.peek() == EOF)) {
+    exec << std::endl;
+  }
+
+  exec << size << " " << time;
+  exec.close();
+}
+
 int main(int argc, char **argv) {
 
   std::string number;
@@ -39,6 +62,8 @@ int main(int argc, char **argv) {
   std::cout << "\033[32mPROCESS INITIATED\033[039m" << std::endl;
   std::cout << "FILE NAME: " << argv[1] << std::endl;
   std::ifstream file(argv[1]);
+
+  // Input File Check
   if (!file.good()) {
     std::cout << "\033[31mFILE DOES NOT EXIST\033[039m" << std::endl;
     return 0;
@@ -51,6 +76,7 @@ int main(int argc, char **argv) {
   while (getline(file, number, ' ')) {
     content.push_back(stoi(number));
   }
+
   std::cout << "FILE CONTENTS: ";
   for (auto i : content)
     std::cout << i << " ";
@@ -58,8 +84,9 @@ int main(int argc, char **argv) {
 
   int array[content.size()];
   std::copy(content.begin(), content.end(), array);
+  file.close();
 
-  // MEASURING TIME
+  // Measuring Time
   auto start = std::chrono::high_resolution_clock::now();
   sort(array, 0, content.size() - 1, content.size());
   auto stop = std::chrono::high_resolution_clock::now();
@@ -71,10 +98,18 @@ int main(int argc, char **argv) {
     std::cout << i << " ";
   std::cout << std::endl;
 
-  std::cout << "\033[1mExecution Time: " << (float)duration.count() / 1000
-            << " microseconds"
-            << "\033[039m";
+  std::cout << "\033[1mExecution Time: " << (float)duration.count() / 1000000
+            << " milliseconds"
+            << "\033[039m" << std::endl;
 
-  file.close();
+  // Output File
+  if (argv[2]) {
+    outputFile(argv[2], array, content.size());
+    std::cout << "\033[22;32mOUTPUT FILE COMPLETE\033[039m" << std::endl;
+  }
+
+  // Execution Time
+  executionTime((float)duration.count() / 1000000, content.size());
+
   return 0;
 }
