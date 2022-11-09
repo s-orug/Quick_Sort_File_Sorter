@@ -7,6 +7,8 @@
 #include <sstream>
 #include <vector>
 
+bool OUTPUTFILECONTENT = false;
+
 int partition(int array[], int low, int high) {
   int pivot = array[high], i = low - 1;
   for (int j = low; j < high; ++j) {
@@ -44,7 +46,7 @@ void outputFile(std::string filename, int array[], int size) {
 
 void executionTime(float time, int size) {
 
-  std::string execution_time_file = "executionTime.txt";
+  std::string execution_time_file = "Oruganti_SaiDurgaRithvik_executionTime.txt";
   std::ofstream exec(execution_time_file, std::ios_base::app);
   std::ifstream file(execution_time_file);
   if (!(file.peek() == EOF)) {
@@ -77,10 +79,12 @@ int main(int argc, char **argv) {
     content.push_back(stoi(number));
   }
 
-  std::cout << "FILE CONTENTS: ";
-  for (auto i : content)
-    std::cout << i << " ";
-  std::cout << std::endl;
+  if (OUTPUTFILECONTENT) {
+    std::cout << "FILE CONTENTS: ";
+    for (auto i : content)
+      std::cout << i << " ";
+    std::cout << std::endl;
+  }
 
   int array[content.size()];
   std::copy(content.begin(), content.end(), array);
@@ -93,10 +97,12 @@ int main(int argc, char **argv) {
   auto duration =
       std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
 
-  std::cout << "SORTED CONTENTS: ";
-  for (auto i : array)
-    std::cout << i << " ";
-  std::cout << std::endl;
+  if (OUTPUTFILECONTENT) {
+    std::cout << "SORTED CONTENTS: ";
+    for (auto i : array)
+      std::cout << i << " ";
+    std::cout << std::endl;
+  }
 
   std::cout << "\033[1mExecution Time: " << (float)duration.count() / 1000000
             << " milliseconds"
