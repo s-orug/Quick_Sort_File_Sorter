@@ -1,20 +1,14 @@
-#!/usr/bin/env python3
-import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
+fig = plt.figure()
+ax = fig.add_subplot(111)
 
-def main():
-    ''' x, y = list(), list()
-     for line in open('Oruganti_SaiDurgaRithvik_averageExecutionTime.txt', 'r'):
-         lines = [i for i in line.split()]
-         x.append(float(lines[0]))
-         y.append(float(lines[1]))
-     print(x, y)
- '''
-    x, y = [5, 1, 8, 2, 5], [5, 6, 3, 1, 4]
-    plt.plot(x, y)
+A = -0.75, -0.25, 0, 0.25, 0.5, 0.75, 1.0
+B = 0.73, 0.97, 1.0, 0.97, 0.88, 0.73, 0.54
 
-    plt.show()
+ax.plot(A,B)
+for xy in zip(A, B):                                       # <--
+    ax.annotate('(%s, %s)' % xy, xy=xy, textcoords='data') # <--
 
-
-if __name__ == "__main__":
-    main()
+ax.grid()
+plt.show()
