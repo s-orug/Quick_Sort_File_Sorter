@@ -17,12 +17,16 @@ bool array_checker(int array[], int value, int size) {
   return false;
 }
 
+std::string lastN(std::string input) { return input.substr(input.size() - 6); }
+
 int main(int argc, char **argv) {
   int sizes[] = {10, 100, 1000};
-  std::string pre_filename = "input/input", filename;
+  std::string text[] = {"ten", "hundread", "thousand"};
+  std::string pre_filename = "input/";
 
   for (int l = 0; l < (int)(sizeof(sizes) / sizeof(int)); ++l) {
     for (int i = 0; i < 25; ++i) {
+      std::string filename = "000000";
 
       // GENERATING ARRAY WITH RANDOM VALUES OF SIZE 'sizes[l]'
 
@@ -39,8 +43,8 @@ int main(int argc, char **argv) {
 
       // FILE CREATING PROCESS
       std::stringstream ss;
-      ss << pre_filename << "_" << sizes[l] << "_" << std::to_string(i);
-      filename = ss.str();
+      ss << sizes[l] << std::to_string(i + 1);
+      filename = pre_filename + text[l] + lastN(filename+ss.str());
       std::ofstream input_file(filename);
       std::cout << filename << std::endl;
 
@@ -48,7 +52,7 @@ int main(int argc, char **argv) {
       for (int s = 0; s < sizes[l] - 1; ++s) {
         input_file << array[s] << " ";
       }
-      input_file << array[sizes[l]-1];
+      input_file << array[sizes[l] - 1];
 
       input_file.close();
     }
