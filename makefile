@@ -23,6 +23,8 @@ run:
 #average:
 #	bash -c "awk '{t[$1]+=$2;n[$1]++}END{for(i in t){print i,t[i]/n[i]}}' Oruganti_SaiDurgaRithvik_executionTime.txt >> Oruganti_SaiDurgaRithvik_averageExecutionTime.txt"; \
 
+# awk '{t[$1]+=$2;n[$1]++}END{for(i in t){print i,t[i]/n[i]}}' Oruganti_SaiDurgaRithvik_executionTime.txt >> Oruganti_SaiDurgaRithvik_averageExecutionTime.txt
+
 remove:
 	@for x in $(LIST1); do \
 		for (( y=1; y<=25; y++ )); do\
