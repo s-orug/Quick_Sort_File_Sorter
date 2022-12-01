@@ -1,42 +1,55 @@
 #include <chrono>
 #include <cmath>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <ostream>
 #include <random>
 #include <sstream>
+#include <stdlib.h>
+#include <tuple>
 #include <vector>
 
 bool OUTPUTFILECONTENT = false;
 
-int partition(int array[], int low, int high) {
-  int pivot = array[high], i = low - 1;
-  for (int j = low; j < high; ++j) {
-    if (array[j] <= pivot) {
-      ++i;
-      int tmp = array[j];
-      array[j] = array[i];
-      array[i] = tmp;
+void swap(std::vector<float> &v, int x, int y) {
+  float temp = v[x];
+  v[x] = v[y];
+  v[y] = temp;
+}
+
+void quicksort(std::vector<float> &vec, int L, int R) {
+  int i, j, mid;
+  float piv;
+  i = L;
+  j = R;
+  mid = L + (R - L) / 2;
+  piv = vec[mid];
+
+  while (i < R || j > L) {
+    while (vec[i] < piv)
+      i++;
+    while (vec[j] > piv)
+      j--;
+
+    if (i <= j) {
+      swap(vec, i, j); // error=swap function doesnt take 3 arguments
+      i++;
+      j--;
+    } else {
+      if (i < R)
+        quicksort(vec, i, R);
+      if (j > L)
+        quicksort(vec, L, j);
+      return;
     }
   }
-
-  int tmp = array[high];
-  array[high] = array[i + 1];
-  array[i + 1] = tmp;
-
-  return ++i;
 }
 
-void sort(int array[], int low, int high, int size) {
-  if (low < high) {
-    sort(array, low, partition(array, low, high) - 1, size);
-    sort(array, partition(array, low, high) + 1, high, size);
-  }
-}
-
-void outputFile(std::string filename, int array[], int size) {
+void outputFile(std::string filename, std::vector<float> array, int size) {
 
   std::ofstream output_file(filename);
+  output_file << std::fixed << std::setprecision(5);
   for (int s = 0; s < size - 1; ++s) {
     output_file << array[s] << " ";
   }
@@ -46,7 +59,8 @@ void outputFile(std::string filename, int array[], int size) {
 
 void executionTime(float time, int size) {
 
-  std::string execution_time_file = "Oruganti_SaiDurgaRithvik_executionTime.txt";
+  std::string execution_time_file =
+      "Oruganti_SaiDurgaRithvik_executionTime.txt";
   std::ofstream exec(execution_time_file, std::ios_base::app);
   std::ifstream file(execution_time_file);
   if (!(file.peek() == EOF)) {
@@ -58,6 +72,7 @@ void executionTime(float time, int size) {
 }
 
 int main(int argc, char **argv) {
+  std::cout << std::endl;
 
   std::string number;
 
@@ -72,11 +87,11 @@ int main(int argc, char **argv) {
   }
   std::cout << "\033[32mFILE EXISTS\033[039m" << std::endl;
 
-  std::vector<int> content;
+  std::vector<std::string> content{};
   std::stringstream ss;
 
   while (getline(file, number, ' ')) {
-    content.push_back(stoi(number));
+    content.push_back(number);
   }
 
   if (OUTPUTFILECONTENT) {
@@ -86,13 +101,26 @@ int main(int argc, char **argv) {
     std::cout << std::endl;
   }
 
-  int array[content.size()];
-  std::copy(content.begin(), content.end(), array);
+  std::vector<float> array;
   file.close();
+
+  //sort(array, 0, content.size() - 1, content.size());
+  for (std::string i : content) {
+
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(5);
+    ss << i;
+
+    float x;
+    ss >> x;
+    std::cout << std::fixed << std::setprecision(5);
+    array.push_back(x);
+  }
 
   // Measuring Time
   auto start = std::chrono::high_resolution_clock::now();
-  sort(array, 0, content.size() - 1, content.size());
+  quicksort(array, 0, content.size() - 1);
+
   auto stop = std::chrono::high_resolution_clock::now();
   auto duration =
       std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
