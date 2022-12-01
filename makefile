@@ -2,10 +2,6 @@ SOURCES = $(shell ls input/*)
 INPUT_DIRECTORY = ~/input
 LIST1 = 10 100 1000
 
-#if [ ! -d "~/Dropbox" ]; then
-#	echo "The ~/Dropbox folder does not exist"
-#fi
-
 
 
 compile: main
@@ -20,7 +16,17 @@ generate:
 run:
 	@for x in $(LIST1); do \
 		for (( y=1; y<=25; y++ )); do\
-			bash -c "./Oruganti_SaiDurgaRithvik_QuickSort input/$${x}_$$y output/$${x}_$$y"; \
+			bash -c "./Oruganti_SaiDurgaRithvik_QuickSort input_$${x}_$$y output_$${x}_$$y"; \
+		done \
+	done
+
+average:
+	awk '{t[$1]+=$2;n[$1]++}END{for(i in t){print i,t[i]/n[i]}}' Oruganti_SaiDurgaRithvik_executionTime.txt >> Oruganti_SaiDurgaRithvik_averageExecutionTime.txt
+
+remove:
+	@for x in $(LIST1); do \
+		for (( y=1; y<=25; y++ )); do\
+			bash -c "rm input_$${x}_$$y output_$${x}_$$y";
 		done \
 	done
 

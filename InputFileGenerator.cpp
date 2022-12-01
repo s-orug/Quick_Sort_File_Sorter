@@ -9,7 +9,7 @@
 int main(int argc, char **argv) {
   int sizes[] = {10, 100, 1000};
   std::string text[] = {"ten", "hundread", "thousand"};
-  std::string pre_filename = "input/";
+  std::string pre_filename = "input_";
 
   for (int l = 0; l < (int)(sizeof(sizes) / sizeof(int)); ++l) {
     for (int i = 0; i < 25; ++i) {
