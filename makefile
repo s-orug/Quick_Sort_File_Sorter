@@ -1,3 +1,4 @@
+SHELL:=/bin/bash
 SOURCES = $(shell ls input/*)
 INPUT_DIRECTORY = ~/input
 LIST1 = 10 100 1000
@@ -20,8 +21,8 @@ run:
 		done \
 	done \
 
-#average:
-#	bash -c "awk '{t[$1]+=$2;n[$1]++}END{for(i in t){print i,t[i]/n[i]}}' Oruganti_SaiDurgaRithvik_executionTime.txt >> Oruganti_SaiDurgaRithvik_averageExecutionTime.txt"; \
+average:
+	$(shell awk '{t[$$1]+=$$2;n[$$1]++}END{for(i in t){print i,t[i]/n[i]}}' Oruganti_SaiDurgaRithvik_executionTime.txt > Oruganti_SaiDurgaRithvik_averageExecutionTime.txt)
 
 # awk '{t[$1]+=$2;n[$1]++}END{for(i in t){print i,t[i]/n[i]}}' Oruganti_SaiDurgaRithvik_executionTime.txt >> Oruganti_SaiDurgaRithvik_averageExecutionTime.txt
 
